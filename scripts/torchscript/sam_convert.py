@@ -48,6 +48,7 @@ def convert_torchscript(checkpoint: str, model_type: str):
 
 def convert_mlir(checkpoint: str, model_type: str, output_type):
   model = _get_model(TupleOutputSamPredictorBaseModel, checkpoint, model_type)
+  # model = _get_model(SamPredictorBaseModel, checkpoint, model_type)
   example_input = _get_example_input()
 
   return torch_mlir.compile(

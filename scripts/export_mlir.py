@@ -39,6 +39,7 @@ if __name__ == "__main__":
   compiled_str = str(compiled)
   print(compiled_str[:500])
   print("...")
+  
   print("Writing output to", args.output, "...")
   with open(args.output, "w", encoding="utf-8") as f:
     f.write(compiled_str)
