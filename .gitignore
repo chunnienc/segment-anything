@@ -36,7 +36,10 @@ model_ts*.txt
 .vscode
 _darcs
 
-# demo 
+# demo
 **/node_modules
 yarn.lock
 package-lock.json
+
+# exported and downlaoded models
+models
