@@ -1,4 +1,4 @@
-from torchscript.sam_convert import export_torchscript
+from torchscript.sam_convert import convert_torchscript
 import argparse
 
 parser = argparse.ArgumentParser(
@@ -25,4 +25,6 @@ parser.add_argument(
 
 if __name__ == "__main__":
   args = parser.parse_args()
-  export_torchscript(checkpoint=args.checkpoint, output=args.output, model_type=args.model_type)
+  scripted = convert_torchscript(checkpoint=args.checkpoint,
+                                 model_type=args.model_type)
+  scripted.save(args.output)

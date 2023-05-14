@@ -27,7 +27,7 @@ def _get_example_input():
   return example_input
 
 
-def export_torchscript(checkpoint: str, model_type: str, output: str):
+def convert_torchscript(checkpoint: str, model_type: str):
   model = _get_model(checkpoint, model_type)
   example_input = _get_example_input()
 
@@ -43,14 +43,13 @@ def export_torchscript(checkpoint: str, model_type: str, output: str):
   # Preview the TorchScript model
   print(scripted_model(example_input))
 
-  # Save the TorchScript model
-  scripted_model.save(output)
+  return scripted_model
 
 
-def export_mlir(checkpoint: str, model_type: str, output: str):
+def convert_mlir(checkpoint: str, model_type: str, output_type):
   model = _get_model(checkpoint, model_type)
   example_input = _get_example_input()
 
-  torch_mlir.compile(model, [example_input],
-                     use_tracing=False,
-                     output_type=torch_mlir.OutputType.RAW)
+  return torch_mlir.compile(model, [example_input],
+                            use_tracing=False,
+                            output_type=output_type)
