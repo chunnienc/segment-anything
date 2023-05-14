@@ -3,15 +3,15 @@ import torch
 import torch_mlir
 from segment_anything import sam_model_registry
 from .patches import apply_patches
-from .sam_predictor_base_model import SamPredictorBaseModel
+from .sam_predictor_base_model import SamPredictorBaseModel, TupleOutputSamPredictorBaseModel
 
 
-def _get_model(checkpoint: str, model_type: str):
+def _get_model(model_cls, checkpoint: str, model_type: str):
   apply_patches()
   # An instance of the model.
   base_model = sam_model_registry[model_type](checkpoint=checkpoint)
 
-  model = SamPredictorBaseModel(model=base_model)
+  model = model_cls(model=base_model)
   model.eval()
 
   return model
@@ -28,7 +28,7 @@ def _get_example_input():
 
 
 def convert_torchscript(checkpoint: str, model_type: str):
-  model = _get_model(checkpoint, model_type)
+  model = _get_model(SamPredictorBaseModel, checkpoint, model_type)
   example_input = _get_example_input()
 
   # Use torch.jit.trace to generate a torch.jit.ScriptModule via tracing.
@@ -47,9 +47,13 @@ def convert_torchscript(checkpoint: str, model_type: str):
 
 
 def convert_mlir(checkpoint: str, model_type: str, output_type):
-  model = _get_model(checkpoint, model_type)
+  model = _get_model(TupleOutputSamPredictorBaseModel, checkpoint, model_type)
   example_input = _get_example_input()
 
-  return torch_mlir.compile(model, [example_input],
-                            use_tracing=False,
-                            output_type=output_type)
+  return torch_mlir.compile(
+      model,
+      [example_input],
+      use_tracing=False,
+      output_type=output_type,
+      verbose=True,
+  )

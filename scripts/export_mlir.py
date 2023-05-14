@@ -37,7 +37,7 @@ if __name__ == "__main__":
                           model_type=args.model_type,
                           output_type=args.output_type)
   compiled_str = str(compiled)
-  print(compiled_str[:100])
+  print(compiled_str[:500])
   print("...")
   print("Writing output to", args.output, "...")
   with open(args.output, "w", encoding="utf-8") as f:
